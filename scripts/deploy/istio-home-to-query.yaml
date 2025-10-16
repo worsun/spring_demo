@@ -1,0 +1,76 @@
+# Istio配置文件，用于控制home-service服务到query-service服务的流量
+# 支持HTTP和gRPC协议，并包含适当的路由规则
+
+---
+# DestinationRule - 定义服务子集
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: query-destination-rule
+  namespace: kt-connect-test
+spec:
+  host: query-service
+  subsets:
+  - name: local
+    labels:
+      version: local-env  # 与kt-connect创建的标签匹配
+  - name: production
+    labels:
+      version: product  # 生产环境标签，根据实际Pod标签确定
+
+---
+# VirtualService - 控制home-service到query-service的流量路由
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: home-to-query-routing
+  namespace: kt-connect-test
+spec:
+  hosts:
+  - query-service
+  http:
+  # HTTP流量路由规则 (基于x-developer header)
+  - match:
+    - headers:
+        traffic-tag-http:
+          exact: istio-routing-tag
+      port: 8080
+    route:
+    - destination:
+        host: query-service
+        subset: local
+        port:
+          number: 8080
+
+  # gRPC流量路由规则 (基于grpc-metadata-developer metadata)
+  - match:
+    - headers:
+        traffic-tag-grpc:
+          exact: istio-routing-tag
+      port: 9090
+    route:
+    - destination:
+        host: query-service
+        subset: local
+        port:
+          number: 9090
+
+  # 默认路由规则 - HTTP流量 (端口8080)
+  - match:
+    - port: 8080
+    route:
+    - destination:
+        host: query-service
+        subset: production
+        port:
+          number: 8080
+
+  # 默认路由规则 - gRPC流量 (端口9090)
+  - match:
+      - port: 9090
+    route:
+      - destination:
+          host: query-service
+          subset: production
+          port:
+            number: 9090

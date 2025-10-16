@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: zookeeper:3.8
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8
+    container_name: query-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: query_service
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ../../server/query/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  query-service:
+    image: query-service-arm:latest
+    container_name: query-service-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/query_service
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SERVER_PORT: 8080
+      GRPC_SERVER_PORT: 9090
+      # 使用 Zookeeper 配置
+      DUBBO_REGISTRY_ADDRESS: zookeeper://zookeeper:2181
+    ports:
+      - "8080:8080" # HTTP 端口 (容器内8080映射到主机8080)
+      - "9090:9090" # gRPC 端口
+    depends_on:
+      mysql:
+        condition: service_healthy
+      zookeeper:
+        condition: service_started
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  home-service:
+    image: home-service-arm:latest
+    container_name: home-service
+    ports:
+      - "8888:8888" # HTTP 端口 (容器内8888映射到主机8888)
+    environment:
+      - SERVER_PORT=8888
+      - QUERY_CLIENT_HTTP_BASE_URL=http://query-service-app:8080
+      - QUERY_CLIENT_GRPC_HOST=query-service-app
+      - QUERY_CLIENT_GRPC_PORT=9090
+      - DUBBO_REGISTRY_ADDRESS=zookeeper://zookeeper:2181
+    depends_on:
+      query-service:
+        condition: service_started
+      zookeeper:
+        condition: service_started
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
