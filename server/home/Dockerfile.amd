@@ -1,0 +1,11 @@
+FROM amazoncorretto:17
+
+ARG JAR_FILE=target/home-1.0.0-SNAPSHOT.jar
+
+WORKDIR /opt/app
+
+COPY ${JAR_FILE} app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
