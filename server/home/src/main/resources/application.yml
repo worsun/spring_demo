@@ -1,0 +1,20 @@
+server:
+  port: 8888
+
+query:
+  client:
+    http:
+      base-url: http://query-service-app:8080
+      path: /api/v1/customers/{id}
+    grpc:
+      host: query-service-app
+      port: 9090
+
+dubbo:
+  application:
+    name: home-service
+    qos-enable: false
+  registry:
+    address: zookeeper://zookeeper:2181
+  consumer:
+    check: false  # 启动时不检查提供者是否可用
