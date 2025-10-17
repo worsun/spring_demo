@@ -23,6 +23,13 @@
         <java.version>17</java.version>
     </properties>
 
+    <modules>
+        <module>../dependency</module>
+        <module>../server/api</module>
+        <module>../server/query</module>
+        <module>../server/home</module>
+    </modules>
+
     <dependencyManagement>
         <dependencies>
             <dependency>

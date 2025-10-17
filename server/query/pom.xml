@@ -21,6 +21,7 @@
         <java.version>17</java.version>
         <grpc.version>1.42.2</grpc.version>
         <protobuf.version>3.19.6</protobuf.version>
+        <dubbo.version>2.7.15</dubbo.version>
     </properties>
 
     <dependencies>
@@ -60,6 +61,47 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+         <!-- API Module -->
+        <dependency>
+            <groupId>com.worsun.spring_demo</groupId>
+            <artifactId>api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Dubbo Spring Boot Starter -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <version>${dubbo.version}</version>
+        </dependency>
+
+        <!-- Dubbo Registry Zookeeper -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-registry-zookeeper</artifactId>
+            <version>${dubbo.version}</version>
+        </dependency>
+        
+        <!-- Zookeeper Client -->
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.8.0</version>
+        </dependency>
+        
+        <!-- Apache Curator -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <version>5.2.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>5.2.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -92,6 +134,12 @@
                     <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
                     <pluginId>grpc-java</pluginId>
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+                    <!-- 添加更多配置选项以解决文件系统问题 -->
+                    <checkStaleness>false</checkStaleness>
+                    <attachProtoSources>false</attachProtoSources>
+                    <clearOutputDirectory>false</clearOutputDirectory>
+                    <!-- 指定临时目录 -->
+                    <temporaryProtoFileDirectory>${project.build.directory}/temp-protoc</temporaryProtoFileDirectory>
                 </configuration>
                 <executions>
                     <execution>
