@@ -32,7 +32,7 @@ services:
     restart: unless-stopped
 
   nacos:
-    image: nacos/nacos-server:latest
+    image: nacos/nacos-server:v2.0.3 # 使用特定版本而不是latest
     container_name: nacos
     ports:
       - "8848:8848" # 主端口
@@ -47,6 +47,9 @@ services:
     networks:
       - app-network
     restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
 
   query-service:
     image: query-service-arm:latest
@@ -57,15 +60,15 @@ services:
       SPRING_DATASOURCE_PASSWORD: root
       SERVER_PORT: 8080
       GRPC_SERVER_PORT: 9090
-      # 使用 Zookeeper 配置
-      DUBBO_REGISTRY_ADDRESS: zookeeper://zookeeper:2181
+      # 使用 Nacos 配置
+      DUBBO_REGISTRY_ADDRESS: nacos://nacos:8848?username=nacos&password=nacos
     ports:
       - "8080:8080" # HTTP 端口 (容器内8080映射到主机8080)
       - "9090:9090" # gRPC 端口
     depends_on:
       mysql:
         condition: service_healthy
-      zookeeper:
+      nacos:
         condition: service_started
     networks:
       - app-network
@@ -81,11 +84,11 @@ services:
       - QUERY_CLIENT_HTTP_BASE_URL=http://query-service-app:8080
       - QUERY_CLIENT_GRPC_HOST=query-service-app
       - QUERY_CLIENT_GRPC_PORT=9090
-      - DUBBO_REGISTRY_ADDRESS=zookeeper://zookeeper:2181
+      - DUBBO_REGISTRY_ADDRESS=nacos://nacos:8848?username=nacos&password=nacos
     depends_on:
       query-service:
         condition: service_started
-      zookeeper:
+      nacos:
         condition: service_started
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]

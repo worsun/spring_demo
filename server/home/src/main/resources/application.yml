@@ -15,7 +15,8 @@ dubbo:
     name: home-service
     qos-enable: false
   registry:
-    address: zookeeper://zookeeper:2181
+    address: nacos://nacos:8848?username=nacos&password=nacos
+    simplified: true
   consumer:
     check: false  # 启动时不检查提供者是否可用
 
