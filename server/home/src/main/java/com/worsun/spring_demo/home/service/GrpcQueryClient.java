@@ -1,8 +1,8 @@
 package com.worsun.spring_demo.home.service;
 
-import com.worsun.spring_demo.common.grpc.CustomerServiceGrpc;
-import com.worsun.spring_demo.common.grpc.GetCustomerRequest;
-import com.worsun.spring_demo.common.grpc.GetCustomerResponse;
+import com.worsun.spring_demo.proto.grpc.CustomerServiceGrpc;
+import com.worsun.spring_demo.proto.grpc.GetCustomerRequest;
+import com.worsun.spring_demo.proto.grpc.GetCustomerResponse;
 import io.grpc.StatusRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

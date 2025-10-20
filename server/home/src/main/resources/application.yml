@@ -18,3 +18,12 @@ dubbo:
     address: zookeeper://zookeeper:2181
   consumer:
     check: false  # 启动时不检查提供者是否可用
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

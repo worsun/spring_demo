@@ -1,11 +1,11 @@
 package com.worsun.spring_demo.query.grpc;
 
-import com.worsun.spring_demo.common.grpc.CustomerDto;
-import com.worsun.spring_demo.common.grpc.CustomerServiceGrpc;
-import com.worsun.spring_demo.common.grpc.GetCustomerRequest;
-import com.worsun.spring_demo.common.grpc.GetCustomerResponse;
-import com.worsun.spring_demo.common.grpc.SearchCustomersRequest;
-import com.worsun.spring_demo.common.grpc.SearchCustomersResponse;
+import com.worsun.spring_demo.proto.grpc.CustomerDto;
+import com.worsun.spring_demo.proto.grpc.CustomerServiceGrpc;
+import com.worsun.spring_demo.proto.grpc.GetCustomerRequest;
+import com.worsun.spring_demo.proto.grpc.GetCustomerResponse;
+import com.worsun.spring_demo.proto.grpc.SearchCustomersRequest;
+import com.worsun.spring_demo.proto.grpc.SearchCustomersResponse;
 import com.worsun.spring_demo.query.domain.Customer;
 import com.worsun.spring_demo.query.service.CustomerService;
 import com.worsun.spring_demo.query.service.CustomerService.CustomerNotFoundException;

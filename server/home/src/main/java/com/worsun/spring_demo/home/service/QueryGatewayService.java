@@ -1,6 +1,6 @@
 package com.worsun.spring_demo.home.service;
 
-import com.worsun.spring_demo.common.grpc.GetCustomerResponse;
+import com.worsun.spring_demo.proto.grpc.GetCustomerResponse;
 import com.worsun.spring_demo.home.mapper.QueryResultMapper;
 import com.worsun.spring_demo.home.model.QueryResult;
 import com.worsun.spring_demo.home.model.RemoteQueryRecord;

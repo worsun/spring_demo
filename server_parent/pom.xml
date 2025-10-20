@@ -28,6 +28,7 @@
         <module>../server/api</module>
         <module>../server/query</module>
         <module>../server/home</module>
+        <module>../server/proto</module>
     </modules>
 
     <dependencyManagement>
