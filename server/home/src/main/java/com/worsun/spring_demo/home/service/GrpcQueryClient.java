@@ -22,11 +22,19 @@ public class GrpcQueryClient {
     }
 
     public GetCustomerResponse fetchRecord(String id) {
+        log.info("[HOME-GRPC-CLIENT] Starting gRPC request for customer ID: {}", id);
+        log.info("[HOME-GRPC-CLIENT] Building GetCustomerRequest with ID: {}", id);
         GetCustomerRequest request = GetCustomerRequest.newBuilder().setId(Long.parseLong(id)).build();
+        log.info("[HOME-GRPC-CLIENT] Built request: {}", request);
+
         try {
-            return blockingStub.getCustomer(request);
+            log.info("[HOME-GRPC-CLIENT] Sending gRPC request to blockingStub.getCustomer");
+            GetCustomerResponse response = blockingStub.getCustomer(request);
+            log.info("[HOME-GRPC-CLIENT] Received gRPC response: {}", response);
+            log.info("[HOME-GRPC-CLIENT] Completed gRPC request for customer ID: {}", id);
+            return response;
         } catch (StatusRuntimeException ex) {
-            log.error("gRPC query request failed for id {}", id, ex);
+            log.error("[HOME-GRPC-CLIENT] gRPC query request failed for id {}", id, ex);
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY,
                     String.format("gRPC query service returned status %s", ex.getStatus()),
                     ex);
