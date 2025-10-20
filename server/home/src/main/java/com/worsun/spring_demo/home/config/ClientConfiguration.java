@@ -1,6 +1,6 @@
 package com.worsun.spring_demo.home.config;
 
-import com.worsun.spring_demo.common.grpc.CustomerServiceGrpc;
+import com.worsun.spring_demo.proto.grpc.CustomerServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

@@ -68,6 +68,12 @@
             <artifactId>api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+        <!-- Proto Module -->
+        <dependency>
+            <groupId>com.worsun.spring_demo</groupId>
+            <artifactId>proto</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
 
         <!-- Dubbo Spring Boot Starter -->
         <dependency>
@@ -125,31 +131,7 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.xolstice.maven.plugins</groupId>
-                <artifactId>protobuf-maven-plugin</artifactId>
-                <version>0.6.1</version>
-                <configuration>
-                    <protoSourceRoot>${project.basedir}/../proto</protoSourceRoot>
-                    <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
-                    <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
-                    <!-- 添加更多配置选项以解决文件系统问题 -->
-                    <checkStaleness>false</checkStaleness>
-                    <attachProtoSources>false</attachProtoSources>
-                    <clearOutputDirectory>false</clearOutputDirectory>
-                    <!-- 指定临时目录 -->
-                    <temporaryProtoFileDirectory>${project.build.directory}/temp-protoc</temporaryProtoFileDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>compile-custom</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
         </plugins>
     </build>
 
