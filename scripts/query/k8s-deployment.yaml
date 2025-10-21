@@ -23,6 +23,8 @@ spec:
           name: http
         - containerPort: 9090
           name: grpc
+        - containerPort: 20880
+          name: dubbo
         env:
         - name: SPRING_DATASOURCE_URL
           value: "jdbc:mysql://mysql-service:3306/query_service"
@@ -54,4 +56,7 @@ spec:
   - name: grpc
     port: 9090
     targetPort: 9090
+  - name: dubbo
+    port: 20880
+    targetPort: 20880
   type: ClusterIP

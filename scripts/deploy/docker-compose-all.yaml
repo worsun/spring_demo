@@ -1,15 +1,6 @@
 version: '3.8'
 
 services:
-  zookeeper:
-    image: zookeeper:3.8
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
-    networks:
-      - app-network
-    restart: unless-stopped
-
   mysql:
     image: mysql:8
     container_name: query-mysql

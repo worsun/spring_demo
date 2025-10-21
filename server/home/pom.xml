@@ -98,12 +98,7 @@
             <artifactId>proto</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
-        
-        <!-- Spring Boot Actuator -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
+
     </dependencies>
 
     <build>
